@@ -1,15 +1,13 @@
-FROM php:8.1-fpm
+FROM node:18
 
+WORKDIR /app
 
-RUN docker-php-ext-install mysqli pdo pdo_mysql
-RUN apt-get update && apt-get install -y nginx
+COPY package.json ./
 
-COPY nginx.conf /etc/nginx/sites-available/default
+RUN npm install
 
-COPY php.ini /usr/local/etc/php/
+COPY . .
 
-RUN mkdir -p /var/www/html
+EXPOSE 4000
 
-EXPOSE 80
-
-CMD service nginx start && php-fpm 
+CMD ["npm", "run," "dev"]
